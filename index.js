@@ -1,14 +1,10 @@
 const { Client } = require("discord.js");
 const client = new Client();
 
-client.on("ready", () => {
-  console.log("I am ready!");
-});
-
 client.on("message", message => {
-
-  if (message.content === "ping") {
-    message.reply("pong");
+  if (message.substring(0, 3) == "hw ") {
+    const cmd = message.substring(3, -1);
+    message.channel.send(cmd);
   }
 });
 
