@@ -14,6 +14,7 @@ client.on("message", async message => {
     switch (message.content.slice(3)) {
       case "calaba":
         message.channel.send("literally none");
+        break;
       case "soto":
         try {
           const response = await axios("https://sites.google.com/site/sotomathpage/homework/calculus-ap-ib");
@@ -56,35 +57,37 @@ client.on("message", async message => {
         } catch (e) {
           message.channel.send("Error getting homework information :(");
         }
-        case "harris":
-          const response = await axios({
-            url: "http://newburyparkhighschool.net/harris/SecureWebsite/IB1/Agenda_IB1_1.htm",
-            auth: {
-              username: "NPHS",
-              password: "P@nther$!"
-            }
-          });
-          const $ = cheerio.load(response.data);
-          const hw = $("tbody > tr:nth-child(3) > td:nth-child(4)");
-          message.channel.send(hw.text().replace(/    /g, ""));
-          const links = hw.find("a");
-          if (links.length > 0) {
-            message.channel.send(`**Downloading ${links.length} files...**`);
-            const docs = await Promise.all(links.get().map(async link => ({
-              file: await axios({
-                url: "http://newburyparkhighschool.net/harris/SecureWebsite/IB1/" + $(link).attr("href"),
-                responseType: "arraybuffer",
-                auth: {
-                  username: "NPHS",
-                  password: "P@nther$!"
-                }
-              }),
-              name: $(link).html() + ".pdf"
-            })));
-            docs.forEach(async doc => {
-              message.channel.send(new Discord.Attachment(doc.file.data, doc.name));
-            });
+        break;
+      case "harris":
+        const response = await axios({
+          url: "http://newburyparkhighschool.net/harris/SecureWebsite/IB1/Agenda_IB1_1.htm",
+          auth: {
+            username: "NPHS",
+            password: "P@nther$!"
           }
+        });
+        const $ = cheerio.load(response.data);
+        const hw = $("tbody > tr:nth-child(3) > td:nth-child(4)");
+        message.channel.send(hw.text().replace(/    /g, ""));
+        const links = hw.find("a");
+        if (links.length > 0) {
+          message.channel.send(`**Downloading ${links.length} files...**`);
+          const docs = await Promise.all(links.get().map(async link => ({
+            file: await axios({
+              url: "http://newburyparkhighschool.net/harris/SecureWebsite/IB1/" + $(link).attr("href"),
+              responseType: "arraybuffer",
+              auth: {
+                username: "NPHS",
+                password: "P@nther$!"
+              }
+            }),
+            name: $(link).html() + ".pdf"
+          })));
+          docs.forEach(async doc => {
+            message.channel.send(new Discord.Attachment(doc.file.data, doc.name));
+          });
+        }
+        break;
     }
   }
 });
