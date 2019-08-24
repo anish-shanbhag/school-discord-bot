@@ -77,7 +77,7 @@ client.on("message", async message => {
                   password: "P@nther$!"
                 }
               }),
-              name: $(link).html()
+              name: $(link).html() + ".pdf"
             })));
             docs.forEach(async doc => {
               message.channel.send(new Discord.Attachment(doc.file.data, doc.name));
