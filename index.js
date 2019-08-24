@@ -12,6 +12,8 @@ client.on("message", async message => {
   }
   if (message.content.slice(0, 3) === "hw ") {
     switch (message.content.slice(3)) {
+      case "calaba":
+        message.channel.send("literally none");
       case "soto":
         try {
           const response = await axios("https://sites.google.com/site/sotomathpage/homework/calculus-ap-ib");
