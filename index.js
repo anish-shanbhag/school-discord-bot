@@ -2,7 +2,6 @@ const Discord = require("discord.js");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const pdf = require("pdf-parse");
-const pdfjs = require("pdfjs");
 const moment = require("moment");
 
 const client = new Discord.Client();
