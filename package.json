@@ -21,7 +21,8 @@
     "cheerio": "1.0.0-rc.3",
     "discord.js": "11.5.1",
     "moment": "2.24.0",
-    "pdf-parse": "1.1.1"
+    "pdf-parse": "1.1.1",
+    "pdfjs": "2.3.0"
   },
   "engines": {
     "node": "12.9.0"
