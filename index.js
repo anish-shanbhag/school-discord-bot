@@ -9,13 +9,15 @@ const moment = require("moment");
 const client = new Client();
 
 client.on("message", async message => {
-  if (message.content.slice(0, 3) == "hw ") {
+  if (message.content.toLowerCase() === "ping") {
+    message.channel.send("pong");
+  }
+  if (message.content.slice(0, 3) === "hw ") {
     switch (message.content.slice(3)) {
       case "soto":
         try {
           const response = await axios("https://sites.google.com/site/sotomathpage/homework/calculus-ap-ib");
           const $ = cheerio.load(response.data);
-          let link;
           $("td.td-file").each(async (i, el) => {
             try {
               if ($(el).find("span.td-value").html().includes("Assignments")) {
@@ -48,12 +50,25 @@ client.on("message", async message => {
                 })
               }
             } catch (e) {
-              message.channel.send(e + "Error getting homework information :(");
+              message.channel.send("Error getting homework information :(");
             }
           });
         } catch (e) {
-          console.log(e);
+          message.channel.send("Error getting homework information :(");
         }
+        case "harris":
+          const response = await axios({
+            url: "http://newburyparkhighschool.net/harris/SecureWebsite/IB1/Agenda_IB1_1.htm",
+            auth: {
+              username: "NPHS",
+              password: "P@nther$!"
+            }
+          });
+          const $ = cheerio.load(response.data);
+          const hw = $("tbody > tr:nth-child(3) > td:nth-child(4)");
+          const a = hw.find("a");
+          a.html(`${a.html()} (http://newburyparkhighschool.net/harris/SecureWebsite/IB1/${a.attr("href")})`);
+          message.channel.send(hw.text().replace(/    /g, ""));
     }
   }
 });
