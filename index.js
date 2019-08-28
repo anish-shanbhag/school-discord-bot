@@ -3,9 +3,7 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const pdf = require("pdf-parse");
 const moment = require("moment");
-const {
-  CronJob
-} = require("cron");
+const { CronJob } = require("cron");
 
 const client = new Discord.Client();
 

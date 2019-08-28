@@ -1,5 +1,5 @@
 {
-  "name": "homework-discord-bot",
+  "name": "school-discord-bot",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anish-shanbhag/homework-discord-bot.git"
+    "url": "git+https://github.com/anish-shanbhag/school-discord-bot.git"
   },
   "author": "Anish Shanbhag <anish.shanbhag.development@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/anish-shanbhag/homework-discord-bot/issues"
+    "url": "https://github.com/anish-shanbhag/school-discord-bot/issues"
   },
-  "homepage": "https://github.com/anish-shanbhag/homework-discord-bot#readme",
+  "homepage": "https://github.com/anish-shanbhag/school-discord-bot#readme",
   "dependencies": {
     "axios": "0.19.0",
     "cheerio": "1.0.0-rc.3",
