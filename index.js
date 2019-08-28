@@ -3,8 +3,39 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const pdf = require("pdf-parse");
 const moment = require("moment");
+const {
+  CronJob
+} = require("cron");
 
 const client = new Discord.Client();
+
+const abDays =
+  "nnnnnnnnnnnnnnnnnnnnabannbababn" +
+  "nnababnnababannbababnnababannn" +
+  "babannbanbannbababnnababannbaba" +
+  "nnnbababnnnababnnababannnnnnnn" +
+  "nbababnnababannbababnnnnnnnnnnn" +
+  "nnnnnababannbabannnnbabannbabab" +
+  "nnababannbabannnnbabannbababn" +
+  "nababannbababnnnababnnababannba" +
+  "babnnababnnnnnnnnnnababannbaba" +
+  "bnnababannbababnnababnnnnababnn" +
+  "ababannbabab";
+
+function getDay() {
+  const date = moment().month(4).date(28);
+  const dayOfYear = date.dayOfYear();
+  console.log(dayOfYear);
+  for (let day = date.month() > 6 ? dayOfYear - 213: dayOfYear + 150;; day--) {
+    console.log(day);
+    if (day === 151) return "b";
+    if (abDays[day] !== "n") return abDays[day];
+  }
+}
+
+const day = getDay();
+
+console.log(day);
 
 client.on("message", async message => {
   if (message.content.toLowerCase() === "ping") {
@@ -12,6 +43,9 @@ client.on("message", async message => {
   }
   if (message.content.slice(0, 3) === "hw ") {
     switch (message.content.slice(3)) {
+      case "test":
+        const html = await new pdftohtml("a-b-days.pdf", "a-b-days.html").convert();
+        break;
       case "calaba":
         message.channel.send("literally none");
         break;
