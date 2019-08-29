@@ -8,8 +8,10 @@ const puppeteer = require("puppeteer");
 
 const client = new Discord.Client();
 
+moment.tz.setDefault("America/Los_Angeles")
+
 function localMoment () {
-  return moment(...arguments).tz("America/Los_Angeles");
+  return moment(...arguments)
 }
 
 const abDays =
@@ -31,6 +33,7 @@ let dayInfo = {};
 function getDayInfo() {
   dayInfo = {};
   const today = localMoment("0", "H").hour(0).dayOfYear();
+  console.log(today);
   dayInfo.today = {
     date: localMoment("0", "H"),
     day: abDays[today]
