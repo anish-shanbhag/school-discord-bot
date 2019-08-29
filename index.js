@@ -8,6 +8,10 @@ const puppeteer = require("puppeteer");
 
 const client = new Discord.Client();
 
+function localMoment () {
+  return moment(...arguments).tz("America/Los_Angeles");
+}
+
 const abDays =
   "NNNNNABABANNBABANNNNBABANNBABAB" +
   "NNABABANNBABANNNNBABANNBABABN" +
@@ -26,49 +30,49 @@ let dayInfo = {};
 
 function getDayInfo() {
   dayInfo = {};
-  const today = moment("0", "H").hour(0).dayOfYear();
+  const today = localMoment("0", "H").hour(0).dayOfYear();
   dayInfo.today = {
-    date: moment("0", "H"),
+    date: localMoment("0", "H"),
     day: abDays[today]
   }
   for (let date = today;; date--) {
     if (dayInfo.last && dayInfo.lastA && dayInfo.lastB) break;
     if (date === 1) {
       dayInfo.last = {
-        date: moment("12 20 0", "M D H"),
+        date: localMoment("12 20 0", "M D H"),
         day: "B"
       }
-      dayInfo.lastA = moment("12 19 0", "M D H");
-      dayInfo.lastB = moment("12 20 0", "M D H");
+      dayInfo.lastA = localMoment("12 19 0", "M D H");
+      dayInfo.lastB = localMoment("12 20 0", "M D H");
     }
     if (abDays[date] !== "N") {
       if (!dayInfo.last) {
         dayInfo.last = {
-          date: moment(date + " 0", "DDD H"),
+          date: localMoment(date + " 0", "DDD H"),
           day: abDays[date]
         }
       }
-      dayInfo["last" + abDays[date]] = moment(date + " 0", "DDD H");
+      dayInfo["last" + abDays[date]] = localMoment(date + " 0", "DDD H");
     }
   }
   for (let date = today + 1;; date++) {
     if (dayInfo.next && dayInfo.nextA && dayInfo.nextB) break;
     if (date === 365) {
       dayInfo.next = {
-        date: moment("1 6 0", "M D H"),
+        date: localMoment("1 6 0", "M D H"),
         day: "A"
       }
-      dayInfo.nextA = moment("1 6 0", "M D H");
-      dayInfo.nextB = moment("1 7 0", "M D H");
+      dayInfo.nextA = localMoment("1 6 0", "M D H");
+      dayInfo.nextB = localMoment("1 7 0", "M D H");
     }
     if (abDays[date] !== "N") {
       if (!dayInfo.next) {
         dayInfo.next = {
-          date: moment(date + " 0", "DDD H"),
+          date: localMoment(date + " 0", "DDD H"),
           day: abDays[date]
         }
       }
-      dayInfo["next" + abDays[date]] = moment(date + " 0", "DDD H");
+      dayInfo["next" + abDays[date]] = localMoment(date + " 0", "DDD H");
     }
   }
 }
@@ -96,7 +100,7 @@ client.on("message", async message => {
       const command = message.content.slice(1).split(" ");
       switch (command[0]) {
         case "test":
-          message.channel.send(moment().format("MMM DDD HH mm SS"));
+          message.channel.send(localMoment().format("MMM DDD HH mm SS"));
         case "help":
           message.channel.send(commands);
           break;
