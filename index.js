@@ -99,8 +99,6 @@ client.on("message", async message => {
     if (message.content.slice(0, 1) === "?") {
       const command = message.content.slice(1).split(" ");
       switch (command[0]) {
-        case "test":
-          message.channel.send(localMoment().format("MMM DDD HH mm SS"));
         case "help":
           message.channel.send(commands);
           break;
@@ -147,7 +145,7 @@ client.on("message", async message => {
                       });
                     }
                   } catch (e) {
-                    message.channel.send(e + "Error getting homework information :(");
+                    message.channel.send("Error getting homework information :(");
                   }
                 });
               } catch (e) {
