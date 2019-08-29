@@ -9,7 +9,7 @@ const puppeteer = require("puppeteer");
 const client = new Discord.Client();
 
 function localMoment () {
-  return moment(...arguments).tz("America/Los_Angeles");
+  return moment(...arguments).tz(process.env.dev === "" ? "Atlantic/Reykjavik" : "America/Los_Angeles");
 }
 
 const abDays =
@@ -43,6 +43,7 @@ function getDayInfo() {
         day: "B"
       }
       dayInfo.lastA = localMoment("12 19 0", "M D H");
+      console.log 
       dayInfo.lastB = localMoment("12 20 0", "M D H");
     }
     if (abDays[date] !== "N") {
