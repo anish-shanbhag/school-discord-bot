@@ -95,6 +95,8 @@ client.on("message", async message => {
     if (message.content.slice(0, 1) === "?") {
       const command = message.content.slice(1).split(" ");
       switch (command[0]) {
+        case "test":
+          message.channel.send(moment().format("MMM DDD HH mm SS"));
         case "help":
           message.channel.send(commands);
           break;
