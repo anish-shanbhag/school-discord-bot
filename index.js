@@ -31,9 +31,8 @@ function getDayInfo() {
   const today = moment().hour(0);
   dayInfo.today = {
     date: today,
-    day: abDays[today]
+    day: abDays[today.dayOfYear()]
   }
-  console.log(dayInfo.today.date.date());
   for (let date = today.dayOfYear();; date--) {
     if (dayInfo.last && dayInfo.lastA && dayInfo.lastB) break;
     if (date === 1) {
@@ -134,7 +133,6 @@ client.on("message", async message => {
                         responseType: "arraybuffer"
                       });
                       const parsed = await pdf(Buffer.from(doc.data));
-                      console.log(dayInfo.lastA.format("DD-MMM-YY"));
                       const matches = [...parsed.text.matchAll(new RegExp(dayInfo.lastA.format("DD-MMM-YY"), "g"))]
                       matches.forEach(match => {
                         const slicedText = parsed.text.slice(match.index);
