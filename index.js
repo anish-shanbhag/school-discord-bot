@@ -135,6 +135,7 @@ client.on("message", async message => {
                         responseType: "arraybuffer"
                       });
                       const parsed = await pdf(Buffer.from(doc.data));
+                      console.log(dayInfo.lastA.format("DD-MMM-YY"));
                       const matches = [...parsed.text.matchAll(new RegExp(dayInfo.lastA.format("DD-MMM-YY"), "g"))]
                       matches.forEach(match => {
                         const slicedText = parsed.text.slice(match.index);
