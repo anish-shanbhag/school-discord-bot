@@ -37,6 +37,7 @@ function getDayInfo() {
     date: localMoment("0", "H"),
     day: abDays[today]
   }
+  console.log(dayInfo.today.date.format("MMM D HH m s"));
   for (let date = today;; date--) {
     if (dayInfo.last && dayInfo.lastA && dayInfo.lastB) break;
     if (date === 1) {
@@ -54,7 +55,6 @@ function getDayInfo() {
           day: abDays[date]
         }
       }
-      console.log(abDays[date] + localMoment(date + " 0", "DDD H").format("MMM D HH m s"))
       dayInfo["last" + abDays[date]] = localMoment(date + " 0", "DDD H");
     }
   }
@@ -81,8 +81,6 @@ function getDayInfo() {
 }
 
 getDayInfo();
-
-console.log(dayInfo.lastB.format("M D H m s z"));
 
 new CronJob("0 2 * * *", getDayInfo);
 
