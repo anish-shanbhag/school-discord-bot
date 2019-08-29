@@ -54,8 +54,8 @@ function getDayInfo() {
           day: abDays[date]
         }
       }
-      console.log(localMoment(date + " 0", "DDD H").format("MMM D HH m s"))
-      dayInfo["last" + abDays[date]] = abDays[date] + localMoment(date + " 0", "DDD H");
+      console.log(abDays[date] + localMoment(date + " 0", "DDD H").format("MMM D HH m s"))
+      dayInfo["last" + abDays[date]] = localMoment(date + " 0", "DDD H");
     }
   }
   for (let date = today + 1;; date++) {
