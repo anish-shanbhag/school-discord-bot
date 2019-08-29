@@ -9,7 +9,7 @@ const puppeteer = require("puppeteer");
 const client = new Discord.Client();
 
 function localMoment () {
-  return moment(...arguments).tz(process.env.dev === "" ? "Atlantic/Reykjavik" : "America/Los_Angeles");
+  return moment(...arguments).tz("America/Los_Angeles");
 }
 
 const abDays =
