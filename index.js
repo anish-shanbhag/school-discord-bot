@@ -77,7 +77,7 @@ function getDayInfo() {
 
 getDayInfo();
 
-new CronJob("0 2 * * *", getDayInfo);
+new CronJob("0 9 * * *", getDayInfo);
 
 const commands = [
   ["help", "displays the list of commands that you can use"],
