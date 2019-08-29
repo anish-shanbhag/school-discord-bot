@@ -93,7 +93,7 @@ const commands = [
 ].map(command => "**?" + command[0] + "** - " + command[1]).join("\n");
 
 client.on("message", async message => {
-  if (process.env.dev === "" || message.channel instanceof Discord.DMChannel) {
+  if (!process.env.dev || message.channel instanceof Discord.DMChannel) {
     if (message.content.slice(0, 1) === "?") {
       const command = message.content.slice(1).split(" ");
       switch (command[0]) {
