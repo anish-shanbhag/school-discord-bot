@@ -43,7 +43,6 @@ function getDayInfo() {
         day: "B"
       }
       dayInfo.lastA = localMoment("12 19 0", "M D H");
-      console.log 
       dayInfo.lastB = localMoment("12 20 0", "M D H");
     }
     if (abDays[date] !== "N") {
@@ -54,6 +53,7 @@ function getDayInfo() {
         }
       }
       dayInfo["last" + abDays[date]] = localMoment(date + " 0", "DDD H");
+      console.log(dayInfo.lastB.format("M D H m s z"));
     }
   }
   for (let date = today + 1;; date++) {
