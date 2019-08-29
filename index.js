@@ -77,7 +77,11 @@ function getDayInfo() {
 
 getDayInfo();
 
-new CronJob("0 9 * * *", getDayInfo);
+new CronJob({
+  cronTime: "0 2 * * *",
+  onTick: getDayInfo,
+  timeZone: "America/Los_Angeles"
+});
 
 const commands = [
   ["help", "displays the list of commands that you can use"],
