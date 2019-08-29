@@ -8,10 +8,8 @@ const puppeteer = require("puppeteer");
 
 const client = new Discord.Client();
 
-console.log(process.env.dev);
-
 function localMoment () {
-  return moment(...arguments).tz("Atlantic/Reykjavik");
+  return moment(...arguments).tz(process.env.dev ? "America/Los_Angeles" : "Atlantic/Reykjavik");
 }
 
 const abDays =
