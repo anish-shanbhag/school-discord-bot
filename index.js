@@ -10,10 +10,6 @@ const client = new Discord.Client();
 
 moment.tz.setDefault("America/Los_Angeles")
 
-function localMoment () {
-  return moment(...arguments)
-}
-
 const abDays =
   "NNNNNABABANNBABANNNNBABANNBABAB" +
   "NNABABANNBABANNNNBABANNBABABN" +
@@ -32,50 +28,50 @@ let dayInfo = {};
 
 function getDayInfo() {
   dayInfo = {};
-  const today = localMoment("0", "H").hour(0).dayOfYear();
+  const today = moment().hour(0);
   dayInfo.today = {
-    date: localMoment("0", "H"),
+    date: today,
     day: abDays[today]
   }
-  console.log(dayInfo.today.date.format("MMM D HH m s"));
-  for (let date = today;; date--) {
+  console.log(dayInfo.today.date.date());
+  for (let date = today.dayOfYear();; date--) {
     if (dayInfo.last && dayInfo.lastA && dayInfo.lastB) break;
     if (date === 1) {
       dayInfo.last = {
-        date: localMoment("12 20 0", "M D H"),
+        date: moment("12 20 0", "M D H"),
         day: "B"
       }
-      dayInfo.lastA = localMoment("12 19 0", "M D H");
-      dayInfo.lastB = localMoment("12 20 0", "M D H");
+      dayInfo.lastA = moment("12 19 0", "M D H");
+      dayInfo.lastB = moment("12 20 0", "M D H");
     }
     if (abDays[date] !== "N") {
       if (!dayInfo.last) {
         dayInfo.last = {
-          date: localMoment(date + " 0", "DDD H"),
+          date: moment(date + " 0", "DDD H"),
           day: abDays[date]
         }
       }
-      dayInfo["last" + abDays[date]] = localMoment(date + " 0", "DDD H");
+      dayInfo["last" + abDays[date]] = moment(date + " 0", "DDD H");
     }
   }
-  for (let date = today + 1;; date++) {
+  for (let date = today.dayOfYear() + 1;; date++) {
     if (dayInfo.next && dayInfo.nextA && dayInfo.nextB) break;
     if (date === 365) {
       dayInfo.next = {
-        date: localMoment("1 6 0", "M D H"),
+        date: moment("1 6 0", "M D H"),
         day: "A"
       }
-      dayInfo.nextA = localMoment("1 6 0", "M D H");
-      dayInfo.nextB = localMoment("1 7 0", "M D H");
+      dayInfo.nextA = moment("1 6 0", "M D H");
+      dayInfo.nextB = moment("1 7 0", "M D H");
     }
     if (abDays[date] !== "N") {
       if (!dayInfo.next) {
         dayInfo.next = {
-          date: localMoment(date + " 0", "DDD H"),
+          date: moment(date + " 0", "DDD H"),
           day: abDays[date]
         }
       }
-      dayInfo["next" + abDays[date]] = localMoment(date + " 0", "DDD H");
+      dayInfo["next" + abDays[date]] = moment(date + " 0", "DDD H");
     }
   }
 }
