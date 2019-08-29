@@ -33,7 +33,6 @@ let dayInfo = {};
 function getDayInfo() {
   dayInfo = {};
   const today = localMoment("0", "H").hour(0).dayOfYear();
-  console.log(localMoment("0", "H").format("MMM D h m s"));
   dayInfo.today = {
     date: localMoment("0", "H"),
     day: abDays[today]
@@ -55,6 +54,7 @@ function getDayInfo() {
           day: abDays[date]
         }
       }
+      console.log(localMoment(date + " 0", "DDD H").format("MMM D HH m s"))
       dayInfo["last" + abDays[date]] = localMoment(date + " 0", "DDD H");
     }
   }
