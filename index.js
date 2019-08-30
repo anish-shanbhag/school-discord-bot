@@ -97,13 +97,26 @@ const commands = [
 ].map(command => "**?" + command[0] + "** - " + command[1]).join("\n");
 
 client.on("message", async message => {
-  if (!process.env.dev || message.channel instanceof Discord.DMChannel) {
+  if (!process.env.dev && message.guild.id !== "614245363498483712" || process.env.dev && message.guild.id === "614245363498483712") {
     if (message.content.slice(0, 1) === "?") {
       const command = message.content.slice(1).split(" ");
       switch (command[0]) {
         case "help":
           message.channel.send(commands);
           break;
+        case "register":
+          const browser = await puppeteer.launch();
+          const page = await browser.newPage();
+          await page.goto('https://conejo.vcoe.org/studentconnect/');
+          await page.waitForSelector("#loginlist > tbody > tr:nth-child(10) > td > a")
+          await page.click("#loginlist > tbody > tr:nth-child(10) > td > a");
+          await page.waitForSelector("#page");
+          await page.type("#Pin", command[1]);
+          await page.type("#Password", command[2]);
+          await page.screenshot({ path: 'test.png' });
+          await browser.close();
+          message.delete();
+          return;
         case "ping":
           message.channel.send("pong");
           break;
