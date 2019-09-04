@@ -5,6 +5,17 @@ const pdf = require("pdf-parse");
 const moment = require("moment");
 const { CronJob } = require("cron");
 const puppeteer = require("puppeteer");
+const bcrypt = require("bcryptjs");
+const CryptoJS = require("crypto-js");
+const auth = process.env.DEV ? require("./auth.json") : null;
+const mysql = require("serverless-mysql")({
+  config: {
+    host: "remotemysql.com",
+    database: "k2nadU14ft",
+    user: "k2nadU14ft",
+    password: process.env.DEV ? auth.DATABASE_PASSWORD : process.env.DATABASE_PASSWORD
+  }
+});
 
 const client = new Discord.Client();
 
@@ -77,11 +88,13 @@ function getDayInfo() {
 
 getDayInfo();
 
-new CronJob({
+const job = new CronJob({
   cronTime: "0 2 * * *",
   onTick: getDayInfo,
   timeZone: "America/Los_Angeles"
 });
+
+job.start();
 
 const commands = [
   ["help", "displays the list of commands that you can use"],
@@ -96,8 +109,17 @@ const commands = [
   ["ping", "pong"]
 ].map(command => "**?" + command[0] + "** - " + command[1]).join("\n");
 
+const classNames = {
+  "IB Math: Calculus": "math",
+  "IB English A: Lang & Lit 1": "english",
+  "IB Biology 1": "biology",
+  "IB History of the Americas": "hoa",
+  "IB Spanish B1": "spanish",
+  "IB Philosophy": "philosophy"
+}
+
 client.on("message", async message => {
-  if (!process.env.dev && message.guild.id !== "614245363498483712" || process.env.dev && message.guild.id === "614245363498483712") {
+  if (!process.env.DEV && message.guild.id !== "614245363498483712" || process.env.DEV && message.guild.id === "614245363498483712") {
     if (message.content.slice(0, 1) === "?") {
       const command = message.content.slice(1).split(" ");
       switch (command[0]) {
@@ -105,17 +127,49 @@ client.on("message", async message => {
           message.channel.send(commands);
           break;
         case "register":
-          const browser = await puppeteer.launch();
-          const page = await browser.newPage();
-          await page.goto('https://conejo.vcoe.org/studentconnect/');
-          await page.waitForSelector("#loginlist > tbody > tr:nth-child(10) > td > a")
-          await page.click("#loginlist > tbody > tr:nth-child(10) > td > a");
-          await page.waitForSelector("#page");
-          await page.type("#Pin", command[1]);
-          await page.type("#Password", command[2]);
-          await page.screenshot({ path: 'test.png' });
-          await browser.close();
           message.delete();
+          const loadingMessage = await message.channel.send("**Loading...**");
+          bcrypt.hash(message.author.id, 10, (error, hash) => {
+            mysql.query("SELECT * FROM student", [hash], async (error, results) => {
+              if (results.every(student => !bcrypt.compareSync(student.id, hash))) {
+                const browser = await puppeteer.launch();
+                const page = await browser.newPage();
+                await page.goto('https://conejo.vcoe.org/studentconnect/');
+                await page.waitFor("#loginlist > tbody > tr:nth-child(10) > td > a");
+                await page.click("#loginlist > tbody > tr:nth-child(10) > td > a");
+                await page.waitFor("#page");
+                await page.type("#Pin", command[1]);
+                await page.type("#Password", command[2]);
+                await page.click("#LoginButton");
+                const result = await page.waitFor(".sturow, #msgdisplay:not([style*='display'])");
+                if (result._remoteObject.description === "div#msgdisplay") {
+                  message.channel.send("Registration failed - your login information is incorrect.")
+                } else {
+                  await page.waitFor(200);
+                  await page.click(".sturow");
+                  await page.waitFor("#SP_Detail");
+                  await page.waitFor(() => !document.querySelector("#waitdiv"));
+                  const classes = await page.evaluate(() => {
+                    return [...document.querySelectorAll("#SP-Schedule > tbody > tr")]
+                      .map(row => ({
+                        name: row.querySelector(":nth-child(6)").innerText,
+                        teacher: row.querySelector(":nth-child(7) > a").innerText.split(",")[0].toLowerCase(),
+                        period: row.querySelector(":nth-child(2)").innerText + row.querySelector(":nth-child(3)").innerText
+                      }));
+                  });
+                  const encryptedID = CryptoJS.AES.encrypt(command[1], hash).toString();
+                  const encryptedPassword = CryptoJS.AES.encrypt(command[2], hash).toString();
+                  await mysql.query("INSERT INTO `student` VALUES (?, ?, ?)", [hash, encryptedID, encryptedPassword]);
+                  const classValues = classes.map(clazz => [classNames[clazz.name] || clazz.name, hash, clazz.teacher, clazz.period]).flat();
+                  await mysql.query("INSERT INTO `class` VALUES " + new Array(classes.length).fill("(?, ?, ?, ?)").join(", "), classValues);
+                }
+                await browser.close();
+              } else {
+                message.channel.send(`It looks like you've already registered.`);
+              }
+              loadingMessage.delete();
+            });
+          });
           return;
         case "ping":
           message.channel.send("pong");
@@ -208,4 +262,4 @@ client.on("message", async message => {
   }
 });
 
-client.login(process.env.BOT_TOKEN);
+client.login(process.env.DEV ? auth.BOT_TOKEN : process.env.BOT_TOKEN);
