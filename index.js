@@ -129,9 +129,9 @@ client.on("message", async message => {
         case "register":
           message.delete();
           const loadingMessage = await message.channel.send("**Loading...**");
-          bcrypt.hash(message.author.id, 10, (error, hash) => {
-            mysql.query("SELECT * FROM student", [hash], async (error, results) => {
-              if (results.every(student => !bcrypt.compareSync(student.id, hash))) {
+          mysql.query("SELECT * FROM student", (error, results) => {
+            if (results.every(student => !bcrypt.compareSync(message.author.id, student.id))) {
+              bcrypt.hash(message.author.id, 10, async (error, hash) => {
                 const browser = await puppeteer.launch();
                 const page = await browser.newPage();
                 await page.goto('https://conejo.vcoe.org/studentconnect/');
@@ -164,11 +164,12 @@ client.on("message", async message => {
                   await mysql.query("INSERT INTO `class` VALUES " + new Array(classes.length).fill("(?, ?, ?, ?)").join(", "), classValues);
                 }
                 await browser.close();
-              } else {
-                message.channel.send(`It looks like you've already registered.`);
-              }
+                loadingMessage.delete();
+              });
+            } else {
+              message.channel.send(`It looks like you've already registered.`);
               loadingMessage.delete();
-            });
+            }
           });
           return;
         case "ping":
