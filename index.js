@@ -284,13 +284,14 @@ client.on("message", async message => {
                 });
                 const $ = cheerio.load(response.data);
                 let hw;
+                const day = classes.find(clazz => clazz.name === "biology").period[1];
                 $("tbody > tr:nth-child(n + 2)").each((i, row) => {
-                  if ($(row).find("td:nth-child(1)").text().includes(dayInfo["last" + classes.find(clazz => clazz.name === "biology").period[1]].format("M/D"))) {
+                  if ($(row).find("td:nth-child(1)").text().includes(dayInfo["last" + day].format("M/D"))) {
                     hw = $(row).find("td:nth-child(4)");
                     return false;
                   }
                 });
-                message.channel.send(hw.text().replace(/    /g, ""));
+                message.channel.send("**The Biology homework for Mrs. Harris " + day + " day is:**\n" + hw.text().replace(/    /g, ""));
                 const links = hw.find("a");
                 if (links.length > 0) {
                   message.channel.send(`**Downloading ${links.length} files...**`);
