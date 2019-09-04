@@ -5,6 +5,7 @@ const pdf = require("pdf-parse");
 const moment = require("moment");
 const { CronJob } = require("cron");
 const puppeteer = require("puppeteer");
+const AsciiTable = require("ascii-table")
 const bcrypt = require("bcryptjs");
 const CryptoJS = require("crypto-js");
 const auth = process.env.DEV ? require("./auth.json") : null;
@@ -162,6 +163,8 @@ client.on("message", async message => {
                   await mysql.query("INSERT INTO `student` VALUES (?, ?, ?)", [hash, encryptedID, encryptedPassword]);
                   const classValues = classes.map(clazz => [classNames[clazz.name] || clazz.name, hash, clazz.teacher, clazz.period]).flat();
                   await mysql.query("INSERT INTO `class` VALUES " + new Array(classes.length).fill("(?, ?, ?, ?)").join(", "), classValues);
+                  const table = new AsciiTable();
+                  message.channel.send("" /* send table with classes */);
                 }
                 await browser.close();
                 loadingMessage.delete();
