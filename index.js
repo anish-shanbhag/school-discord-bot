@@ -134,7 +134,7 @@ const classNames = {
 }
 
 client.on("message", async message => {
-  if (!process.env.DEV && message.guild.id !== "614245363498483712" || process.env.DEV && message.guild.id === "614245363498483712") {
+  if (!process.env.DEV || process.env.DEV && message.guild && message.guild.id === "614245363498483712") {
     if (message.content.slice(0, 1) === "?") {
       const command = message.content.slice(1).split(" ");
       let classes;
@@ -175,7 +175,7 @@ client.on("message", async message => {
             const students = await mysql.query("SELECT id FROM student");
             if (students.every(student => !bcrypt.compareSync(message.author.id, student.id))) {
               bcrypt.hash(message.author.id, 10, async (error, hash) => {
-                const browser = await puppeteer.launch();
+                const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
                 const page = await browser.newPage();
                 await page.goto('https://conejo.vcoe.org/studentconnect/');
                 await page.waitFor("#loginlist > tbody > tr:nth-child(10) > td > a");
