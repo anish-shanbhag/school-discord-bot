@@ -7,7 +7,7 @@ const Discord = require("discord.js");
 const classAbbreviations = require("../class-names").abbreviations;
 
 module.exports = {
-  name: "registe",
+  name: "register",
   description: "registers you with your Q id and password so that you can use commands that require registration",
   usage: "<id> <password>",
   async: true,
