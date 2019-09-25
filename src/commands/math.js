@@ -8,6 +8,7 @@ module.exports = {
   description: "Displays the homework for Mr. Soto's IB Calculus class",
   usesDay: true,
   async: true,
+  hw: true,
   async execute(message, args, loadingMessage, day) {
     const response = await axios("https://sites.google.com/site/sotomathpage/homework/calculus-ap-ib");
     const $ = cheerio.load(response.data);

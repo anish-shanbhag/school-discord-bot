@@ -8,6 +8,7 @@ module.exports = {
   description: "displays the homework for Mrs. Harris's IB Biology class",
   usesDay: true,
   async: true,
+  hw: true,
   async execute(message, args, loadingMessage, day) {
     const response = await axios({
       url: "http://newburyparkhighschool.net/harris/SecureWebsite/IB1/Agenda_IB1_1.htm",

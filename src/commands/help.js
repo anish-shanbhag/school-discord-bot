@@ -9,15 +9,20 @@ module.exports = {
     const unregisteredCommands = [];
     commandFiles.forEach(file => {
       const command = require("./" + file);
-      if (command.usesDay || command.usesQ) registeredCommands.push(command);
-      else unregisteredCommands.push(command);
+      if (!command.hw) {
+        if (command.usesDay || command.usesQ) registeredCommands.push(command);
+        else unregisteredCommands.push(command);
+      }
     });
+    registeredCommands.push({
+      name: "<class>",
+      description: "gets the homework for <class> while taking into account whether you have it A day or B day"
+    })
     const format = commands => "⠀\n" + commands.map(command => `**?${command.name}${command.usage ? ` ${command.usage}` : ""}** - ${command.description}`).join("\n") + "\n⠀";
     const formattedClassNames = Object.entries(classNames).map(className => `**${className[0]}**: ${className[1]}`).join("\n")
     message.embed({
       title: "Help",
-      fields: [
-        {
+      fields: [{
           name: "The following commands don't require you to register:",
           value: format(unregisteredCommands)
         },
