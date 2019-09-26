@@ -4,6 +4,11 @@ const CryptoJS = require("crypto-js");
 const fs = require("fs");
 const mysql = require("./db");
 const classAbbreviations = require("./class-names").abbreviations;
+const axios = require("axios");
+
+if (!process.env.DEV) {
+  setInterval(() => axios(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`, 280000));
+}
 
 Discord.Channel.prototype.embed = async function(content) {
   if (typeof content === "string") {

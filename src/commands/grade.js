@@ -4,7 +4,7 @@ const fullClassNames = require("../class-names").fullNames;
 
 module.exports = {
   name: "grade",
-  description: "Sends you a DM containing your grade in <class>",
+  description: "Sends you a direct message containing your grade in <class>",
   usage: "<class>",
   async: true,
   usesQ: true,
