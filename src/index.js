@@ -7,7 +7,7 @@ const classAbbreviations = require("./class-names").abbreviations;
 const axios = require("axios");
 
 if (!process.env.DEV) {
-  setInterval(() => axios(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`), 280000);
+  setInterval(() => axios(`https://${process.env.PROJECT_DOMAIN}.glitch.me/`), 280000);
 }
 
 Discord.Channel.prototype.embed = async function(content) {
