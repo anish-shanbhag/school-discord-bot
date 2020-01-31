@@ -31,15 +31,19 @@ module.exports = {
               return [...document.querySelectorAll("#SP-Schedule > tbody > tr")]
                 .map(row => ({
                   name: row.querySelector(":nth-child(6)").innerText,
-                  teacher: row.querySelector(":nth-child(7) > a").innerText.split(",")[0].toLowerCase(),
+                  teacher: row.querySelector(":nth-child(7)").innerText.split(",")[0].toLowerCase(),
                   period: row.querySelector(":nth-child(2)").innerText + row.querySelector(":nth-child(3)").innerText
-                })).filter(clazz => clazz.period !== "1B");
+                }))
             });
+            console.log(classes);
             const encryptedID = CryptoJS.AES.encrypt(args[0], message.author.id).toString();
             const encryptedPassword = CryptoJS.AES.encrypt(args[1], message.author.id).toString();
             await mysql.query("INSERT INTO student VALUES (?, ?, ?)", [hash, encryptedID, encryptedPassword]);
-            const classValues = classes.map(clazz => [classAbbreviations[clazz.name] || clazz.name, message.author.id, clazz.teacher, clazz.period]).flat();
-            await mysql.query("INSERT INTO class VALUES " + new Array(classes.length).fill("(?, ?, ?, ?)").join(", "), classValues);
+            const classValues = classes
+              .filter((clazz, i) => clazz.period !== "1B" && classes.map(innerClazz => innerClazz.name).indexOf(clazz.name) === i)
+              .map(clazz => [classAbbreviations[clazz.name] || clazz.name, message.author.id, clazz.teacher, clazz.period]).flat();
+            console.log(classValues);
+            await mysql.query("INSERT INTO class VALUES " + new Array(classValues.length / 4).fill("(?, ?, ?, ?)").join(", "), classValues);
             loadingMessage.delete();
             message.embed({
               title: "You've been registered! Here are your classes:",

@@ -1,8 +1,8 @@
 const mysql = require("serverless-mysql")({
   config: {
     host: "remotemysql.com",
-    database: "k2nadU14ft",
-    user: "k2nadU14ft",
+    database: "VmdAL4vT7i",
+    user: "VmdAL4vT7i",
     password: process.env.DEV ? require("../auth.json").DATABASE_PASSWORD : process.env.DATABASE_PASSWORD
   }
 });

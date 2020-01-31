@@ -1,14 +1,9 @@
-const Discord = require("discord.js");  
+const Discord = require("discord.js");
 const bcrypt = require("bcryptjs");
 const CryptoJS = require("crypto-js");
 const fs = require("fs");
 const mysql = require("./db");
 const classAbbreviations = require("./class-names").abbreviations;
-const axios = require("axios");
-
-if (!process.env.DEV) {
-  setInterval(() => axios(`https://${process.env.PROJECT_DOMAIN}.glitch.me/`), 280000);
-}
 
 Discord.Channel.prototype.embed = async function(content) {
   if (typeof content === "string") {
@@ -49,6 +44,12 @@ Discord.Message.prototype.embed = async function(content) {
 }
 
 const client = new Discord.Client();
+
+console.log(process.env.DEV);
+
+client.login(process.env.DEV ? require("../auth.json").BOT_TOKEN : process.env.BOT_TOKEN);
+
+module.exports = client;
 
 const commands = {};
 fs.readdirSync('./src/commands/').forEach(file => {
@@ -95,5 +96,3 @@ client.on("message", async message => {
   }
   command.execute(...executeArgs);
 });
-
-client.login(process.env.DEV ? require("../auth.json").BOT_TOKEN : process.env.BOT_TOKEN);
