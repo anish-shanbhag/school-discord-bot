@@ -112,7 +112,7 @@ module.exports = {
           } else {
             const assignment = searchedAssignments[response - 1];
             //assignment.graded
-            if (false) {
+            if (assignment.graded) {
               if (!(message.channel instanceof Discord.DMChannel)) {
                 message.embed("A direct message has been sent with your grade!");
               }
