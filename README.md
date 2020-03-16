@@ -1,6 +1,6 @@
 # school-discord-bot
 
-A Discord bot that tracks school and homework information.
+A Discord bot that tracks school and homework information. It was created to make things like checking homework and grades easier.
 
 # Implementation
 
@@ -9,4 +9,9 @@ This bot uses Node.js and the discord.js package from npm. It also uses the mysq
 # Available Commands
 
 The image below displays the commands which can be used with this bot:
-![](demo/help.png)
+
+<img src="help.png" width="400px">
+
+# Demo
+
+You can find a demo of some of the bot's features at https://www.youtube.com/watch?v=CIwasNK8dQ8.
