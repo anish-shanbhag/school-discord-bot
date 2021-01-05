@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/anish-shanbhag/school-discord-bot#readme",
   "dependencies": {
-    "axios": "0.19.0",
+    "axios": "0.21.1",
     "bcryptjs": "2.4.3",
     "cheerio": "1.0.0-rc.3",
     "cron": "1.7.1",
